@@ -3,7 +3,9 @@
 #include <time.h>
 #include <stdlib.h>
 
+#ifndef N
 #define N 1000
+#endif
 
 void inicializa_matriz(float *mat){
 	for(int i = 0; i < N; i++){
@@ -23,7 +25,7 @@ void mult_controle(float *A, float *B, float *C){
 	for(int i = 0; i < N; i++){
 		for(int j = 0; j < N; j++){
 			for(int k = 0; k < N; k++){
-				C[i * N + j] += A[i * N + k] * B[i * N + j];
+				C[i * N + j] += A[i * N + k] * B[k * N + j];
 			}
 		}
 	}
@@ -47,7 +49,9 @@ void mult_sse(float *A, float *B, float *C){
 		for(int k = 0; k < N; k++){
 			__m128 vet_a = _mm_set1_ps(A[i * N + k]); // multiplica o mesmo elemento de A quatro vezes no vetor
 
-			for(int j = 0; j < N; j += 4){
+			int j = 0;
+
+			for(; j + 4  <= N; j += 4){
 				__m128 vet_b = _mm_loadu_ps(&B[k * N + j]); // carrega 4 elementos de b no vet_b
 				__m128 vet_c = _mm_loadu_ps(&C[i * N + j]); // carrega 4 elementos de c em vet_c
 
@@ -55,6 +59,9 @@ void mult_sse(float *A, float *B, float *C){
 				vet_c = _mm_add_ps(vet_c, vet_mult);
 
 				_mm_storeu_ps(&C[i * N + j], vet_c); // guarda os 4 resultados na memoria
+			}
+			for(; j < N; j++){
+				C[i * N + j] += A[i * N + k] * B[k * N + j]; // resto caso N nao seja multiplo de 4
 			}
 		}
 	}
@@ -68,8 +75,10 @@ void mult_unroll(float *A, float *B, float *C){
 
 			__m128 vet_a = _mm_set1_ps(A[i * N + k]); // multiplica o mesmo elemento de A quatro vezes no vetor
 
+			int j = 0;
+
 			// agora vai pular de 8 em 8
-			for(int j = 0; j < N; j += 8){
+			for(; j + 8 <= N; j += 8){
 
 				__m128 vet_b1 = _mm_loadu_ps(&B[k * N + j]); // carrega 4 elementos de b no vet_b1
 				__m128 vet_c1 = _mm_loadu_ps(&C[i * N + j]); // carrega 4 elementos de c em vet_c1
@@ -87,6 +96,21 @@ void mult_unroll(float *A, float *B, float *C){
 				vet_c2 = _mm_add_ps(vet_c2, vet_mult2);
 
 				_mm_storeu_ps(&C[i * N + j + 4], vet_c2); // guarda os 4 proximos resultados na memoria
+			}
+			for(; j + 4  <= N; j += 4){
+
+				//resto caso N não seja divisivel por 8 mas seja por 4
+
+				__m128 vet_b = _mm_loadu_ps(&B[k * N + j]); // carrega 4 elementos de b no vet_b
+				__m128 vet_c = _mm_loadu_ps(&C[i * N + j]); // carrega 4 elementos de c em vet_c
+
+				__m128 vet_mult = _mm_mul_ps(vet_a, vet_b); // multiplicacao e soma: C = (A * B) + C
+				vet_c = _mm_add_ps(vet_c, vet_mult);
+
+				_mm_storeu_ps(&C[i * N + j], vet_c); // guarda os 4 resultados na memoria
+			}
+			for(; j < N; j++){
+				C[i * N + j] += A[i * N + k] * B[k * N + j]; // resto caso N nao seja divisel por 4
 			}
 		}
 	}

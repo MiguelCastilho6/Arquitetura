@@ -1,0 +1,4 @@
+		Trabalho de otimização de algoritmo de multiplicação de matrizes.
+
+	Primeiro foram feitas duas funções de caráter auxiliar que facilitarão no decorrer do código. A primeira serve para inicializar as matrizes com o tamanho "N" definido no cabeçalho do código. A segunda, para garantir que os espaços na memória que os vetores correspondentes as matrizes venham a ocupar sejam iguais a 0. Ou seja, sem lixo algum de memória ou e operações anteriores. 
+	Após essa etapa de preparação, foi programada a função de controle do exercício. Uma função clássica de multiplicação de matrizes que será responsável por nos dar tempos de comparação. Ela multiplicará as matrizes A e B e colocará na matriz resultado C. Um ajuste que vale mencionar é o C[i * N + j], por exemplo, que serve como uma forma de linearizar a matriz e, assim, deixá-la equivalente a uma memória RAM. 

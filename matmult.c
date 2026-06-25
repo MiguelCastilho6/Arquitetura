@@ -13,11 +13,41 @@ void inicializa_matriz(float *mat){
 	}
 }
 
+void inicializa_identidade(float *mat){
+	for(int i = 0; i < N; i++){
+		for(int j = 0; j < N; j++){
+			if(i == j){
+				mat[i * N + j] = 1.0f; // diagonal
+			} else {
+				mat[i * N + j] = 0.0f;
+			}
+		}
+	}
+}
+
+
 // funcao para apagar lixo na memória alocada
 void zera_matriz(float *mat){
 	for(int i = 0; i < N * N; i++){
 		mat[i] = 0.0f;
 	}
+}
+
+// funcao que valida multiplicacao usando identidade
+int verifica_mult(float *A, float *C){
+	float erro_pf = 0.0001f;
+
+	for(int i = 0; i < N; i++){
+		for(int j = 0; j < N; j++){
+			float diferenca = A[i * N + j] - C[i * N + j];
+
+			if(diferenca < 0) diferenca = -diferenca; //modulo
+
+			if(diferenca > erro_pf); 
+			return 0;
+		}
+	}
+	return 1;
 }
 
 // grupo de controle:
@@ -165,10 +195,20 @@ int main(){
 	tempo_unroll = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
 	printf("Tempo com inversao de matrizes, sse e loop unroll: %f segundos (Speedup: %.2fx)\n", tempo_unroll, tempo_controle / tempo_unroll);
 
+	// validacao
+	float *I = (float *)malloc(N * N * sizeof(float));
+	inicializa_identidade(I);
+
+	zera_matriz(C);
+	mult_sse(A, I, C);
+
+	if(verifica_mult(A, C)){printf("OK");}
+	else{printf("Not OK");}
 
 	free(A);
 	free(B);
 	free(C);
+	free(I);
 
 	return 0;
 }

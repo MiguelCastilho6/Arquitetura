@@ -1,3 +1,4 @@
+
 #include <stdio.h>
 #include <immintrin.h> 
 #include <time.h>
@@ -8,7 +9,7 @@
 #endif
 
 void inicializa_matriz(float *mat){
-	for(int i = 0; i < N; i++){
+	for(int i = 0; i < N * N; i++){
 		mat[i] = (float)(rand() % 10 + 1);
 	}
 }
@@ -43,8 +44,9 @@ int verifica_mult(float *A, float *C){
 
 			if(diferenca < 0) diferenca = -diferenca; //modulo
 
-			if(diferenca > erro_pf); 
+			if(diferenca > erro_pf){
 			return 0;
+			}
 		}
 	}
 	return 1;
@@ -200,10 +202,10 @@ int main(){
 	inicializa_identidade(I);
 
 	zera_matriz(C);
-	mult_sse(A, I, C);
+	mult_unroll(A, I, C);
 
-	if(verifica_mult(A, C)){printf("OK");}
-	else{printf("Not OK");}
+	if(verifica_mult(A, C)){printf("OK\n\n");}
+	else{printf("Not OK\n\n");}
 
 	free(A);
 	free(B);

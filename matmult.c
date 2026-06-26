@@ -4,9 +4,7 @@
 #include <time.h>
 #include <stdlib.h>
 
-#ifndef N
-#define N 1000
-#endif
+int N = 1000;
 
 void inicializa_matriz(float *mat){
 	for(int i = 0; i < N * N; i++){
@@ -149,7 +147,13 @@ void mult_unroll(float *A, float *B, float *C){
 }
 
 
-int main(){
+int main(int argc, char *argv[]){
+
+	int versao = 0; // rodar todas as versoes
+
+	if(argc > 1) N = atoi(argv[1]);
+	if(argc > 2) versao = atoi(argv[2]);
+
 	float *A = (float *)malloc(N * N * sizeof(float));
 	float *B = (float *)malloc(N * N * sizeof(float));
 	float *C = (float *)malloc(N * N * sizeof(float));
@@ -167,101 +171,111 @@ int main(){
 	double tempo_unroll1;
 	double tempo_unroll2;
 
-	printf("\n");
-	printf("Testes matriz %dx%d\n\n", N, N);
+	if(versao == 0){
+		printf("\n");
+		printf("Testes matriz %dx%d\n\n", N, N);
 
-	// execucao controle 1
-	zera_matriz(C);
-	inicio = clock();
-	mult_controle(A, B, C);
-	fim = clock();
-	tempo_controle1 = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
+		// execucao controle 1
+		zera_matriz(C);
+		inicio = clock();
+		mult_controle(A, B, C);
+		fim = clock();
+		tempo_controle1 = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
 
-	// execucao controle 2
-	zera_matriz(C);
-	inicio = clock();
-	mult_controle(A, B, C);
-	fim = clock();
-	tempo_controle2 = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
+		// execucao controle 2
+		zera_matriz(C);
+		inicio = clock();
+		mult_controle(A, B, C);
+		fim = clock();
+		tempo_controle2 = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
 
-	double tempo_controle_f = (tempo_controle1 + tempo_controle2) / 2.0;
-	printf("	Tempo de controle: %f segundos\n", tempo_controle_f);
+		double tempo_controle_f = (tempo_controle1 + tempo_controle2) / 2.0;
+		printf("	Tempo de controle: %f segundos\n", tempo_controle_f);
 
-	// execucao inversao 1
-	zera_matriz(C);
-	inicio = clock();
-	mult_inversao(A, B, C);
-	fim = clock();
-	tempo_inversao1 = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
-	// execucao inversao 2
-	zera_matriz(C);
-	inicio = clock();
-	mult_inversao(A, B, C);
-	fim = clock();
-	tempo_inversao2 = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
+		// execucao inversao 1
+		zera_matriz(C);
+		inicio = clock();
+		mult_inversao(A, B, C);
+		fim = clock();
+		tempo_inversao1 = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
+		// execucao inversao 2
+		zera_matriz(C);
+		inicio = clock();
+		mult_inversao(A, B, C);
+		fim = clock();
+		tempo_inversao2 = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
 
-	double tempo_inversao_f = (tempo_inversao1 + tempo_inversao2) / 2.0;
-	printf("	Tempo com inversao de matrizes: %f segundos (Speedup: %.2fx)\n",tempo_inversao_f, tempo_controle_f / tempo_inversao_f);
+		double tempo_inversao_f = (tempo_inversao1 + tempo_inversao2) / 2.0;
+		printf("	Tempo com inversao de matrizes: %f segundos (Speedup: %.2fx)\n",tempo_inversao_f, tempo_controle_f / tempo_inversao_f);
 
-	// execucao sse 1
-	zera_matriz(C);
-	inicio = clock();
-	mult_sse(A, B, C);
-	fim = clock();
-	tempo_sse1 = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
-	// execucao sse 2
-	zera_matriz(C);
-	inicio = clock();
-	mult_sse(A, B, C);
-	fim = clock();
-	tempo_sse2 = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
+		// execucao sse 1
+		zera_matriz(C);
+		inicio = clock();
+		mult_sse(A, B, C);
+		fim = clock();
+		tempo_sse1 = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
+		// execucao sse 2
+		zera_matriz(C);
+		inicio = clock();
+		mult_sse(A, B, C);
+		fim = clock();
+		tempo_sse2 = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
 
-	double tempo_sse_f = (tempo_sse1 + tempo_sse2) / 2.0;
-	printf("	Tempo com inversao de matrizes e sse: %f segundos (Speedup: %.2fx)\n", tempo_sse_f, tempo_controle_f / tempo_sse_f);
+		double tempo_sse_f = (tempo_sse1 + tempo_sse2) / 2.0;
+		printf("	Tempo com inversao de matrizes e sse: %f segundos (Speedup: %.2fx)\n", tempo_sse_f, tempo_controle_f / tempo_sse_f);
 
-	// execucao loop unrolling 1
-	zera_matriz(C);
-	inicio = clock();
-	mult_unroll(A, B, C);
-	fim = clock();
-	tempo_unroll1 = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
-	// execucao loop unrolling 2
-	zera_matriz(C);
-	inicio = clock();
-	mult_unroll(A, B, C);
-	fim = clock();
-	tempo_unroll2 = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
+		// execucao loop unrolling 1
+		zera_matriz(C);
+		inicio = clock();
+		mult_unroll(A, B, C);
+		fim = clock();
+		tempo_unroll1 = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
+		// execucao loop unrolling 2
+		zera_matriz(C);
+		inicio = clock();
+		mult_unroll(A, B, C);
+		fim = clock();
+		tempo_unroll2 = ((double)(fim - inicio)) / CLOCKS_PER_SEC;
 
-	double tempo_unroll_f = (tempo_unroll1 + tempo_unroll2) / 2.0;
-	printf("	Tempo com inversao de matrizes, sse e loop unroll: %f segundos (Speedup: %.2fx)\n", tempo_unroll_f, tempo_controle_f / tempo_unroll_f);
+		double tempo_unroll_f = (tempo_unroll1 + tempo_unroll2) / 2.0;
+		printf("	Tempo com inversao de matrizes, sse e loop unroll: %f segundos (Speedup: %.2fx)\n", tempo_unroll_f, tempo_controle_f / tempo_unroll_f);
 
-	// validacao
-	float *I = (float *)malloc(N * N * sizeof(float));
-	inicializa_identidade(I);
+		// validacao
+		float *I = (float *)malloc(N * N * sizeof(float));
+		inicializa_identidade(I);
 
-	printf("\nValidacao\n");
+		printf("\nValidacao\n");
 
-	zera_matriz(C);
-	mult_controle(A, I, C);
-	printf("	controle  %s\n", verifica_mult(A, C) ? "OK" : "Not OK");
+		zera_matriz(C);
+		mult_controle(A, I, C);
+		printf("	controle  %s\n", verifica_mult(A, C) ? "OK" : "Not OK");
 
-	zera_matriz(C);
-	mult_inversao(A, I, C);
-	printf("	inversao  %s\n", verifica_mult(A, C) ? "OK" : "Not OK");
+		zera_matriz(C);
+		mult_inversao(A, I, C);
+		printf("	inversao  %s\n", verifica_mult(A, C) ? "OK" : "Not OK");
 
-	zera_matriz(C);
-	mult_sse(A, I, C);
-	printf("	sse  %s\n", verifica_mult(A, C) ? "OK" : "Not OK");
+		zera_matriz(C);
+		mult_sse(A, I, C);
+		printf("	sse  %s\n", verifica_mult(A, C) ? "OK" : "Not OK");
 
-	zera_matriz(C);
-	mult_unroll(A, I, C);
-	printf("	unroll  %s\n", verifica_mult(A, C) ? "OK" : "Not OK");
+		zera_matriz(C);
+		mult_unroll(A, I, C);
+		printf("	unroll  %s\n", verifica_mult(A, C) ? "OK" : "Not OK");
 
+		free(I);
+	}
+	// funcoes isoladas para perfiladores
+	else{
+		zera_matriz(C);
+		if(versao == 1)	mult_controle(A, B, C);
+		if(versao == 2)	mult_inversao(A, B, C);
+		if(versao == 3)	mult_sse(A, B, C);
+		if(versao == 4)	mult_unroll(A, B, C);
+	}
 
 	free(A);
 	free(B);
 	free(C);
-	free(I);
 
 	return 0;
 }

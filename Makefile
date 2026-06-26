@@ -1,4 +1,4 @@
-N ?= 400
+N ?= 1000
 
 all: matmult
 

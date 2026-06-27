@@ -1,0 +1,85 @@
+=================
+N = 200
+=================
+
+Testes matriz 200x200
+
+	Tempo de controle: 0.016775 segundos
+	Tempo com inversao de matrizes: 0.007213 segundos (Speedup: 2.33x)
+	Tempo com inversao de matrizes e sse: 0.002321 segundos (Speedup: 7.23x)
+	Tempo com inversao de matrizes, sse e loop unroll: 0.002060 segundos (Speedup: 8.14x)
+
+Validacao
+	controle  OK
+	inversao  OK
+	sse  OK
+	unroll  OK
+
+=================
+N = 500
+=================
+
+Testes matriz 500x500
+
+	Tempo de controle: 0.285739 segundos
+	Tempo com inversao de matrizes: 0.111420 segundos (Speedup: 2.56x)
+	Tempo com inversao de matrizes e sse: 0.041463 segundos (Speedup: 6.89x)
+	Tempo com inversao de matrizes, sse e loop unroll: 0.036639 segundos (Speedup: 7.80x)
+
+Validacao
+	controle  OK
+	inversao  OK
+	sse  OK
+	unroll  OK
+
+=================
+N = 750
+=================
+
+Testes matriz 750x750
+
+	Tempo de controle: 1.167972 segundos
+	Tempo com inversao de matrizes: 0.389026 segundos (Speedup: 3.00x)
+	Tempo com inversao de matrizes e sse: 0.175014 segundos (Speedup: 6.67x)
+	Tempo com inversao de matrizes, sse e loop unroll: 0.154741 segundos (Speedup: 7.55x)
+
+Validacao
+	controle  OK
+	inversao  OK
+	sse  OK
+	unroll  OK
+
+=================
+N = 1250
+=================
+
+Testes matriz 1250x1250
+
+	Tempo de controle: 5.915516 segundos
+	Tempo com inversao de matrizes: 1.842629 segundos (Speedup: 3.21x)
+	Tempo com inversao de matrizes e sse: 0.941132 segundos (Speedup: 6.29x)
+	Tempo com inversao de matrizes, sse e loop unroll: 0.878553 segundos (Speedup: 6.73x)
+
+Validacao
+	controle  OK
+	inversao  OK
+	sse  OK
+	unroll  OK
+
+=================
+N = 2200
+=================
+
+Testes matriz 2200x2200
+
+	Tempo de controle: 81.639831 segundos
+	Tempo com inversao de matrizes: 10.080942 segundos (Speedup: 8.10x)
+	Tempo com inversao de matrizes e sse: 5.210492 segundos (Speedup: 15.67x)
+	Tempo com inversao de matrizes, sse e loop unroll: 5.093177 segundos (Speedup: 16.03x)
+
+Validacao
+	controle  OK
+	inversao  OK
+	sse  OK
+	unroll  OK
+
